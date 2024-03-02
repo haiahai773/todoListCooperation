@@ -9,6 +9,7 @@ import secretKey from './src/secretKey.js';
 
 //express模块化，导入user接口模块
 import user from "./src/user.js"
+import orga from "./src/orga.js"
 
 //异步读取文件，编码格式为utf-8
 const dbYaml = fs.readFileSync("./src/db.config.yaml", "utf-8")
@@ -24,6 +25,7 @@ const app = express()
 
 //使用模块，增加根路径/user
 app.use("/user", user)
+app.use("/orga", orga)
 
 //通过中间件实现jwt验证
 
