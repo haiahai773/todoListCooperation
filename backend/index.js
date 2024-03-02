@@ -5,6 +5,8 @@ import jsyaml from "js-yaml"
 import jwt from "jsonwebtoken"
 import { expressjwt } from "express-jwt"
 
+import secretKey from './src/secretKey.js';
+
 //express模块化，导入user接口模块
 import user from "./src/user.js"
 
@@ -18,12 +20,12 @@ const sql = await mysql2.createConnection({
     ...dbConfig.db
 })
 
-const secretKey = "Icicle_Crino_Secret_Key"
-
 const app = express()
 
 //使用模块，增加根路径/user
 app.use("/user", user)
+
+//通过中间件实现jwt验证
 
 app.listen(3000, ()=>{
     console.log("http://localhost:3000")
