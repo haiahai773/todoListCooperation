@@ -28,6 +28,19 @@ app.use("/user", user)
 app.use("/orga", orga)
 
 //通过中间件实现jwt验证
+app.use((err, req, res, next)=>{
+	if(err.name === "UnauthorizedError") {
+		return res.send({
+			status: 401,
+			message: "无效token"
+		})
+	}
+
+	res.send({
+		status: 500,
+		message: "未知的错误"
+	})
+})
 
 app.listen(3000, ()=>{
     console.log("http://localhost:3000")
