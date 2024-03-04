@@ -37,8 +37,8 @@
 import { ref, onBeforeMount } from "vue"
 import axios from "axios"
 import { useRouter } from "vue-router"
-import { useURLStore } from "@/stores/URL"
-import { useTempDataStore } from "@/stores/tempData"
+import { useURLStore } from "../stores/URL"
+import { useTempDataStore } from "../stores/tempData"
 import { toast, type ToastOptions } from "vue3-toastify"
 
 const router = useRouter()
