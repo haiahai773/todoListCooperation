@@ -57,8 +57,17 @@ router.post("/reg", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     let { account, password } = req.body
-    //先判断密码是否正确
     let [[result]] = await sql.query(`SELECT orga_id, password FROM orga WHERE account = ?`, [account])
+    //先判断账号是否存在
+    if(result === undefined){
+        //账号不存在
+        res.send({
+            code: 400,
+            messaeg: "账号不存在"
+        })
+        return
+    }
+    //账号存在，判断密码是否正确
     if (result.password == password) {
         //密码正确，根据组织id生成jwt
         let Token = jwt.sign({

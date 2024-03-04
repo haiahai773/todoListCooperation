@@ -4,5 +4,18 @@
 
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import login from "@/views/login.vue"
 </script>
+
+<style lang="scss">
+*{
+  box-sizing: border-box;
+}
+
+body, html{
+  height: 100vh;
+  width: 100vw;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden;
+}
+</style>

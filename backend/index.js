@@ -17,8 +17,8 @@ const dbYaml = fs.readFileSync("./src/db.config.yaml", "utf-8")
 const dbConfig = jsyaml.load(dbYaml)
 //使用mysql2的.createConnetion方法，传入数据库配置，await回调连接数据库 
 const sql = await mysql2.createConnection({
-    //用...解构配置
-    ...dbConfig.db
+	//用...解构配置
+	...dbConfig.db
 })
 
 const app = express()
@@ -28,8 +28,8 @@ app.use("/user", user)
 app.use("/orga", orga)
 
 //通过中间件实现jwt验证
-app.use((err, req, res, next)=>{
-	if(err.name === "UnauthorizedError") {
+app.use((err, req, res, next) => {
+	if (err.name === "UnauthorizedError") {
 		return res.send({
 			status: 401,
 			message: "无效token"
@@ -42,6 +42,13 @@ app.use((err, req, res, next)=>{
 	})
 })
 
-app.listen(3000, ()=>{
-    console.log("http://localhost:3000")
+//中间件允许跨域
+app.use("*", (req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173")
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+	next()
+})
+
+app.listen(3000, () => {
+	console.log("http://localhost:3000")
 })

@@ -11,6 +11,13 @@ import secretKey from './secretKey.js';
 //使用express的.Router()方法，调用后返回router实例，然后在router实例上进行操作，编写接口
 const router = express.Router()
 
+//中间件允许跨域
+router.use("*", (req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", "*")
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+	next()
+})
+
 //路由使用express的json模块，接受客户端post发来的json文件
 router.use(express.json())
 
@@ -62,10 +69,20 @@ router.post("/reg", async (req, res)=>{
 router.post("/login", async (req, res)=>{
     //从请求体中，将账号和密码解构出来
     let { account, password } = req.body
+    console.log(req.body);
     //通过账号在user表中查询，判断密码是否正确
     //第一层数组解构，获取query返回数组中第一个元素（查询到的表数据的数组）
     //地而成对象解构，获取表数据数组中的第一个元素，即第一行数据
     let [[result]] = await sql.query(`SELECT user_id, password FROM user WHERE account = ?`, [account])
+    //判断账号是否存在
+    if(result === undefined){
+        //账号不存在
+        res.send({
+            code: 400,
+            message: "账号不存在"
+        })
+        return
+    }
     //如果用户输入的密码等于实际密码
     if(password == result.password){
         //通过jwt生成token，payload部分包含用户id
