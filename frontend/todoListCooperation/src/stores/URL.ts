@@ -5,6 +5,7 @@ export const useURLStore = defineStore('URL', () => {
   const userReg = baseURL + "/user/reg"
   const userLogin = baseURL + "/user/login" 
   const userCreateTodo = baseURL + "/user/createTodo"
+  const userGetTodo = baseURL + "/user/getTodo"
   const userDoneTodo = baseURL + "/user/doneTodo"
   
   const orgaReg = baseURL + "/orga/reg"
@@ -21,6 +22,7 @@ export const useURLStore = defineStore('URL', () => {
     userReg,
     userLogin,
     userCreateTodo,
+    userGetTodo,
     userDoneTodo,
 
     orgaReg,

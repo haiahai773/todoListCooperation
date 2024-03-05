@@ -116,7 +116,7 @@ const regSubmit = () => {
     console.log(TempData);
     
     //注册校验
-    if (TempData.tempRegAccount.length <= 8 || TempData.tempRegAccount.length >= 24 || TempData.tempRegAccount.length <= 8 || TempData.tempRegPassword.length >= 24) {
+    if (TempData.tempRegAccount.length < 8 || TempData.tempRegAccount.length > 24 || TempData.tempRegAccount.length < 8 || TempData.tempRegPassword.length > 24) {
         console.log(TempData.tempRegAccount.length, TempData.tempLoginAccount.length); 
         
         //提示账号不符合要求

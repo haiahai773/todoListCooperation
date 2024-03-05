@@ -4,7 +4,7 @@ import fs from "node:fs"
 import jsyaml from "js-yaml"
 import jwt from "jsonwebtoken"
 import { expressjwt } from "express-jwt"
-import moment from "moment" 
+import moment from "moment"
 
 import secretKey from './secretKey.js';
 
@@ -13,9 +13,16 @@ const router = express.Router()
 
 //中间件允许跨域
 router.use("*", (req, res, next) => {
-	res.setHeader("Access-Control-Allow-Origin", "*")
-	res.setHeader("Access-Control-Allow-Headers", "Content-Type")
-	next()
+    //
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    if (res.path == "/loign" || res.path == "/reg") {
+        //登录和注册不需要jwt认证
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+        next()
+    }
+    //其他需要jwt认证，再添加Authorization字段
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    next()
 })
 
 //路由使用express的json模块，接受客户端post发来的json文件
@@ -38,18 +45,18 @@ router.use(expressjwt({
     //expressjwt()的.unless()方法传入配置对象，配置对象中的path属性定义不需要jwt验证的接口
 }).unless({
     //用户注册和登录不需要jwt验证
-    path:[
+    path: [
         "/user/reg",
         "/user/login"
     ]
 }))
 
 //用户注册 输入账号和密码和用户名称 返回jwt类型的token
-router.post("/reg", async (req, res)=>{
+router.post("/reg", async (req, res) => {
     //使用mysql2的createConnection()方法返回的实例，的.query()方法执行sql语句。先在数据库中查询，账号是否重复。如果重复的话，返回code400
     let [result] = await sql.query(`SELECT account FROM user WHERE account = ?`, [req.body.account])
     //账号没有被注册过，允许注册
-    if(result.length <= 0){
+    if (result.length <= 0) {
         //前端确保提交的账号和密码都不为空，并且符合要求
         await sql.query(`INSERT INTO user(account, password, user_name) VALUES(?, ?, ?)`, [req.body.account, req.body.password, req.body.user_name])
         res.send({
@@ -66,7 +73,7 @@ router.post("/reg", async (req, res)=>{
 })
 
 //用户登录，输入账号和密码，然后在user表中查询。正确的话返回jwt生成的token，jwt的payload中包含用户id。
-router.post("/login", async (req, res)=>{
+router.post("/login", async (req, res) => {
     //从请求体中，将账号和密码解构出来
     let { account, password } = req.body
     console.log(req.body);
@@ -75,7 +82,7 @@ router.post("/login", async (req, res)=>{
     //地而成对象解构，获取表数据数组中的第一个元素，即第一行数据
     let [[result]] = await sql.query(`SELECT user_id, password FROM user WHERE account = ?`, [account])
     //判断账号是否存在
-    if(result === undefined){
+    if (result === undefined) {
         //账号不存在
         res.send({
             code: 400,
@@ -84,7 +91,7 @@ router.post("/login", async (req, res)=>{
         return
     }
     //如果用户输入的密码等于实际密码
-    if(password == result.password){
+    if (password == result.password) {
         //通过jwt生成token，payload部分包含用户id
         //使用jsonwebtoken模块的.sign()方法生成token，通过传入三个参数进行配置
         //第一参数为payload部分，第二参数为加密用的密钥，第三参数可以规定token过期时间
@@ -108,9 +115,9 @@ router.post("/login", async (req, res)=>{
 })
 
 //用户创建待办事项，需要token
-router.post("/createTodo", async (req, res)=>{
+router.post("/createTodo", async (req, res) => {
     //从请求体中解构出信息
-    let {event_name, start_time, end_time, target_id} = req.body
+    let { event_name, start_time, end_time, target_id } = req.body
     //从token中获取用户id
     let user_id = req.auth.user_id
     //将时间戳转化为YYYY-MM-DD HH:mm:ss格式
@@ -132,11 +139,16 @@ router.post("/createTodo", async (req, res)=>{
 })
 
 //用户获取待办事项
-router.get("/getTodo", async (req, res)=>{
+router.get("/getTodo", async (req, res) => {
     //从token中获取用户id
     let user_id = req.auth.user_id
-    //将user_id作为选择条件，在todo表中查找满足条件的表行，返回该用户创建的所有待办事项
-    let [result] = await sql.query(`SELECT * FROM todo WHERE user_id = ?`, [user_id])
+    //根据userid获取到其创建的待办事项
+    //将target_id作为选择条件，在todo表中查找满足条件的表行，返回该用户创建的所有待办事项
+    let [result] = await sql.query(`SELECT todo.todo_id, todo.event_name, todo.start_time, todo.end_time, todo.target_id, todo.is_checked, orga.orga_id, orga.orga_name  FROM todo LEFT JOIN orga ON todo.orga_id = orga.orga_id WHERE target_id = ?`, [user_id])
+    //如果有orga_id的话，在orga表中找到用户名返回
+    if(result)
+    //如果没有orga_id的话，来源就是自己
+
     console.log(result);
     //将查询结果作为data返回
     res.send({
@@ -147,7 +159,7 @@ router.get("/getTodo", async (req, res)=>{
 })
 
 //用户完成待办事项 请求携带待办事项的id
-router.post("/doneTodo", (req, res)=>{
+router.post("/doneTodo", (req, res) => {
     //获取待办事项id
     let { todo_id } = req.body
     //将相应待办事项id对应的is_checked属性设置为true

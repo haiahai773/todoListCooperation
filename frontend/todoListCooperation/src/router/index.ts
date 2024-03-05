@@ -18,22 +18,22 @@ const router = createRouter({
       component: ()=>import("@/views/user/user.vue"),
       children: [
         {
-          path: "/list",
+          path: "list",
           name: "list",
           component: ()=>import("@/components/list.vue"),
         },
         {
-          path: "/calendar",
+          path: "calendar",
           name: "calendar",
           component: ()=>import("@/components/calendar.vue")
         },
         {
-          path: "/quation",
+          path: "quation",
           name: "quation",
           component: ()=>import("@/components/quation.vue")
         },
         {
-          path: "/tomato",
+          path: "tomato",
           name: "tomato",
           component: ()=>import("@/components/tomato.vue")
         }
@@ -45,19 +45,19 @@ const router = createRouter({
       component: ()=>import("@/views/orga/orga.vue"),
       children: [
         {
-          path: "/member",
+          path: "member",
           name: "member",
           component: ()=>import("@/components/member.vue")
         },
         {
-          path: "/asign",
+          path: "asign",
           name: "asign",
           component: ()=>import("@/components/asign.vue")
         },
         {
-          path: "/calendar",
-          name: "calendar",
-          component: ()=>import("@/components/calendar.vue")
+          path: "calendarOrga",
+          name: "calendarOrga",
+          component: ()=>import("@/components/calendarOrga.vue")
         }
       ]
     } 
