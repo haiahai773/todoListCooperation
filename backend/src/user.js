@@ -103,7 +103,8 @@ router.post("/login", async (req, res) => {
         res.send({
             code: 200,
             message: "登录成功",
-            token: Token
+            token: Token,
+            user_id: result.user_id
         })
         return
     }
@@ -138,13 +139,13 @@ router.post("/createTodo", async (req, res) => {
     })
 })
 
-//用户获取待办事项
+//用户获取未完成的待办事项
 router.get("/getTodo", async (req, res) => {
     //从token中获取用户id
     let user_id = req.auth.user_id
     //根据userid获取到其创建的待办事项
     //将target_id作为选择条件，在todo表中查找满足条件的表行，返回该用户创建的所有待办事项
-    let [result] = await sql.query(`SELECT todo.todo_id, todo.event_name, todo.start_time, todo.end_time, todo.target_id, todo.is_checked, orga.orga_id, orga.orga_name  FROM todo LEFT JOIN orga ON todo.orga_id = orga.orga_id WHERE target_id = ?`, [user_id])
+    let [result] = await sql.query(`SELECT todo.todo_id, todo.event_name, todo.start_time, todo.end_time, todo.target_id, todo.is_checked, orga.orga_id, orga.orga_name  FROM todo LEFT JOIN orga ON todo.orga_id = orga.orga_id WHERE target_id = ? and todo.is_checked = false`, [user_id])
     //如果有orga_id的话，在orga表中找到用户名返回
     if(result)
     //如果没有orga_id的话，来源就是自己
@@ -167,6 +168,18 @@ router.post("/doneTodo", (req, res) => {
     res.send({
         code: 200,
         message: "完成待办事项" + todo_id
+    })
+})
+
+//用户undo待办事项 请求携带待办事项的id
+router.post("/undoTodo", (req, res) => {
+    //获取待办事项id
+    let { todo_id } = req.body
+    //将相应待办事项id对应的is_checked属性设置为false
+    sql.query(`UPDATE todo SET is_checked = false WHERE todo_id = ?`, [todo_id])
+    res.send({
+        code: 200,
+        message: "未完成待办事项" + todo_id
     })
 })
 

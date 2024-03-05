@@ -90,6 +90,8 @@ const loginSubmit = () => {
                 "transition": "slide",
                 "dangerouslyHTMLString": true
             })
+            //保存个人id
+            localStorage.setItem("user_id", res.data.user_id)
             router.push("/user")
         }
         else {

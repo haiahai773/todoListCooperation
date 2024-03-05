@@ -6,9 +6,9 @@
                     <div class="user-list" @click="toPath('/user/list')"><el-icon class="icon">
                             <Tickets />
                         </el-icon>清单</div>
-                    <div class="user-calendar" @click="toPath('/user/calendar')"><el-icon class="icon">
+                    <!-- <div class="user-calendar" @click="toPath('/user/calendar')"><el-icon class="icon">
                             <Calendar />
-                        </el-icon>日历</div>
+                        </el-icon>日历</div> -->
                     <div class="user-quation" @click="toPath('/user/quation')"><el-icon class="icon">
                             <CollectionTag />
                         </el-icon>四象限</div>
@@ -40,7 +40,7 @@ const URL = useURLStore()
 const Todo = useTodoStore()
 
 //自动为axios默认添加授权头
-// axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`
 
 //axios获取用户所有待办
 axios.get(URL.userGetTodo,{
@@ -48,7 +48,6 @@ axios.get(URL.userGetTodo,{
         "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
 }).then((res) => {
-    console.log(Todo.todoList)
     Todo.todoList = res.data.data
 }).catch((err) => {
     console.log(err);
