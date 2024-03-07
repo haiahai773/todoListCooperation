@@ -40,6 +40,8 @@ import { useRouter } from "vue-router"
 import { useURLStore } from "../stores/URL"
 import { useTempDataStore } from "../stores/tempData"
 import { toast, type ToastOptions } from "vue3-toastify"
+import JSEncrypt from "jsencrypt"
+import { pubKey } from "@/stores/keys"
 
 const router = useRouter()
 const URL = useURLStore()
@@ -76,9 +78,17 @@ const toReg = () => {
 
 //登录
 const loginSubmit = () => {
+    //创建实例对象
+    const encryptor = new JSEncrypt()
+
+
+    encryptor.setPublicKey(pubKey)
+    const rsaPassword = encryptor.encrypt(TempData.tempLoginPassword)
+    console.log(rsaPassword);
+
     axios.post(URL.userLogin, {
         account: TempData.tempLoginAccount,
-        password: TempData.tempLoginPassword
+        password: rsaPassword
     }).then((res) => {
         //通过res.data.code判断是否登录成功
         if (res.data.code == 200) {
@@ -92,7 +102,7 @@ const loginSubmit = () => {
             })
             //保存个人id
             localStorage.setItem("user_id", res.data.user_id)
-            router.push("/user")
+            router.push("/user/list")
         }
         else {
             toast("账号或密码错误", {
@@ -116,11 +126,11 @@ const loginSubmit = () => {
 //注册
 const regSubmit = () => {
     console.log(TempData);
-    
+
     //注册校验
     if (TempData.tempRegAccount.length < 8 || TempData.tempRegAccount.length > 24 || TempData.tempRegAccount.length < 8 || TempData.tempRegPassword.length > 24) {
-        console.log(TempData.tempRegAccount.length, TempData.tempLoginAccount.length); 
-        
+        console.log(TempData.tempRegAccount.length, TempData.tempLoginAccount.length);
+
         //提示账号不符合要求
         toast("账号格式错误!", {
             "theme": "auto",

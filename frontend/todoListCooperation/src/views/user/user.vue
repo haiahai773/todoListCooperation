@@ -33,25 +33,31 @@
 import { useRouter } from 'vue-router';
 import { useURLStore } from "@/stores/URL"
 import { useTodoStore } from "@/stores/todo"
+import { useQuationStore } from "@/stores/quation"
 import { toast, type ToastOptions } from "vue3-toastify"
 import axios from "axios"
 
 const URL = useURLStore()
 const Todo = useTodoStore()
+const Quation = useQuationStore()
 
 //自动为axios默认添加授权头
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`
 
 //axios获取用户所有待办
-axios.get(URL.userGetTodo,{
-    headers:{
+axios.get(URL.userGetTodo, {
+    headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
 }).then((res) => {
-    Todo.todoList = res.data.data
+    Todo.todoList = JSON.parse(JSON.stringify(res.data.data))
+    Quation.topleftList = JSON.parse(JSON.stringify(res.data.data))
+    Quation.topRightList = []
+    Quation.bottomleftList = []
+    Quation.bottomRightList = []
 }).catch((err) => {
     console.log(err);
-    
+
     toast("网络异常", {
         "theme": "auto",
         "type": "error",

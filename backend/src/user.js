@@ -5,8 +5,10 @@ import jsyaml from "js-yaml"
 import jwt from "jsonwebtoken"
 import { expressjwt } from "express-jwt"
 import moment from "moment"
+import crypto from "node:crypto"
 
 import secretKey from './secretKey.js';
+import { priKey } from "../store/crypt.js"
 
 //使用express的.Router()方法，调用后返回router实例，然后在router实例上进行操作，编写接口
 const router = express.Router()
@@ -77,6 +79,19 @@ router.post("/login", async (req, res) => {
     //从请求体中，将账号和密码解构出来
     let { account, password } = req.body
     console.log(req.body);
+
+    //将Base64编码的加密数据解码成二进制
+    let passwordBuffer = Buffer.from(password, "base64")
+
+    //将二进制的加密数据通过node的crypto模块解密
+    password = crypto.privateDecrypt(
+        {
+            key: priKey,
+            padding: crypto.constants.RSA_PKCS1_PADDING
+        },
+        passwordBuffer
+    );
+    console.log(password.toString("UTF-8"));
     //通过账号在user表中查询，判断密码是否正确
     //第一层数组解构，获取query返回数组中第一个元素（查询到的表数据的数组）
     //地而成对象解构，获取表数据数组中的第一个元素，即第一行数据
@@ -147,10 +162,10 @@ router.get("/getTodo", async (req, res) => {
     //将target_id作为选择条件，在todo表中查找满足条件的表行，返回该用户创建的所有待办事项
     let [result] = await sql.query(`SELECT todo.todo_id, todo.event_name, todo.start_time, todo.end_time, todo.target_id, todo.is_checked, orga.orga_id, orga.orga_name  FROM todo LEFT JOIN orga ON todo.orga_id = orga.orga_id WHERE target_id = ? and todo.is_checked = false`, [user_id])
     //如果有orga_id的话，在orga表中找到用户名返回
-    if(result)
-    //如果没有orga_id的话，来源就是自己
+    if (result)
+        //如果没有orga_id的话，来源就是自己
 
-    console.log(result);
+        console.log(result);
     //将查询结果作为data返回
     res.send({
         code: 200,

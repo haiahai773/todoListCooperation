@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from "pinia-plugin-persistedstate"
+import { createPersistedState } from 'pinia-plugin-persistedstate'
 import Elementplus from "element-plus"
 import "element-plus/dist/index.css"
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
@@ -15,7 +15,10 @@ import router from './router'
 const app = createApp(App)
 
 const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
+
+pinia.use(createPersistedState({
+    storage: sessionStorage
+}))
 
 app.use(pinia)
 app.use(router)

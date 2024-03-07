@@ -6,8 +6,10 @@
         </div>
         <div class="list-list__warpper">
             <div class="list-list__noDone">
-                <div class="list-list__item" v-for="(item, index) in Todo.todoList" id="index" v-show="!Todo.todoList[index].is_checked">
-                    <el-checkbox v-model="Todo.todoList[index].is_checked" @change="doneChange(Todo.todoList, Todo.doneList, index)"></el-checkbox>
+                <div class="list-list__item" v-for="(item, index) in Todo.todoList" id="index"
+                    v-show="!Todo.todoList[index].is_checked">
+                    <el-checkbox v-model="Todo.todoList[index].is_checked"
+                        @change="doneChange(Todo.todoList, Todo.doneList, index)"></el-checkbox>
                     <div class="item-name">
                         {{ item.event_name }}
                     </div>
@@ -28,7 +30,8 @@
             <div class="list-list__done">
                 <!-- 通过order属性实现倒叙 -->
                 <div class="list-list__item" v-for="(item, index) in Todo.doneList" id="index">
-                    <el-checkbox v-model="Todo.doneList[index].is_checked" @change="doneChange(Todo.doneList, Todo.todoList, index)"></el-checkbox>
+                    <el-checkbox v-model="Todo.doneList[index].is_checked"
+                        @change="doneChange(Todo.doneList, Todo.todoList, index)"></el-checkbox>
                     <div class="item-name">
                         {{ item.event_name }}
                     </div>
@@ -45,11 +48,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onBeforeUnmount } from "vue";
 import { reactive } from "vue"
 import axios from "axios"
 import { useURLStore } from "../stores/URL"
 import { useTodoStore } from "../stores/todo"
+import { useQuationStore } from "@/stores/quation"
 import moment from "moment"
 import { toast, type ToastOptions } from "vue3-toastify"
 
@@ -58,6 +62,16 @@ import { type todoEvent } from "@/interface/interface"
 
 const Todo = useTodoStore()
 const URL = useURLStore()
+const Quation = useQuationStore()
+
+onBeforeUnmount(() => {
+    //获取新增部分，然后添加进Quatino.topleftList
+    // let newCount = Todo.todoList.length - Quation.topleftList.length
+    // let quationLength = Quation.topleftList.length
+    // for(let i=0; i<newCount; i++){
+    //     Quation.topleftList.push() = JSON.parse(JSON.stringify(Todo.todoList))[quationLength + i]
+    // }
+})
 
 const tempTodo = reactive<TempTodo>({
     event_name: "",
@@ -108,10 +122,13 @@ const submmitTodo = () => {
             "dangerouslyHTMLString": true
         })
     })
+
+    //然后把新增项添加到Quation里
+    Quation.topleftList.push(JSON.parse(JSON.stringify(tempTodo)))
 }
 
 //通过check-box完成待办 抽象函数，将target指定的值删除，添加到nextTaregt中，然后根据当前值判断使用哪一个接口
-const doneChange = (target:Array<todoEvent>, nextTarget:Array<todoEvent>,index: number) => {
+const doneChange = (target: Array<todoEvent>, nextTarget: Array<todoEvent>, index: number) => {
     //如果当前的值为false，则undo待办
     if (target[index].is_checked == false) {
         axios.post(URL.userUndoTodo, {

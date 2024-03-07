@@ -15,9 +15,12 @@
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
     "axios": "^1.6.7",
+    "draggable": "^4.2.0",
+    "jsencrypt": "^3.3.2",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.4.15",
+    "vue-draggable-plus": "^0.3.5",
     "vue-router": "^4.2.5",
     "vue3-toastify": "^0.2.1"
   },
