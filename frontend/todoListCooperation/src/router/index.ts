@@ -1,16 +1,16 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: '/',
+      path: "/",
       redirect: "/login",
     },
     {
       path: "/login",
       name: "login",
-      component: () => import("@/views/login.vue")
+      component: () => import("@/views/login.vue"),
     },
     {
       path: "/user",
@@ -25,19 +25,19 @@ const router = createRouter({
         {
           path: "calendar",
           name: "calendar",
-          component: () => import("@/components/calendar.vue")
+          component: () => import("@/components/calendar.vue"),
         },
         {
           path: "quation",
           name: "quation",
-          component: () => import("@/components/quation.vue")
+          component: () => import("@/components/quation.vue"),
         },
         {
           path: "tomato",
           name: "tomato",
-          component: () => import("@/components/tomato.vue")
-        }
-      ]
+          component: () => import("@/components/tomato.vue"),
+        },
+      ],
     },
     {
       path: "/orga",
@@ -47,53 +47,52 @@ const router = createRouter({
         {
           path: "member",
           name: "member",
-          component: () => import("@/components/member.vue")
+          component: () => import("@/components/member.vue"),
         },
         {
           path: "asign",
           name: "asign",
-          component: () => import("@/components/asign.vue")
+          component: () => import("@/components/asign.vue"),
         },
         {
           path: "calendarOrga",
           name: "calendarOrga",
-          component: () => import("@/components/calendarOrga.vue")
-        }
-      ]
-    }
-  ]
-})
+          component: () => import("@/components/calendarOrga.vue"),
+        },
+      ],
+    },
+  ],
+});
 
 //白名单，未登录也可以访问
-const whiteList: Array<string> = ["/", "/login"]
+const whiteList: Array<string> = ["/", "/login"];
 
-const userList: Array<string> = ["/user/list", "/user/quation", "/user/tomato"]
+const userList: Array<string> = ["/user/list", "/user/quation", "/user/tomato"];
 
 //路由前置守卫做页面权限管理
 router.beforeEach((to, from, next) => {
   console.log(to.path);
-  
+
   //如果在白名单里，则直接通行
   if (whiteList.includes(to.path)) {
-    next()
-    return
+    next();
+    return;
   }
 
   //如果有token，说明登陆了，放行 /user/list 和 /user/quation
   if (localStorage.getItem("token")) {
     if (userList.includes(to.path)) {
-      next()
-      return
-    }
-    else{
-      next("/login")
-      return
+      next();
+      return;
+    } else {
+      next("/login");
+      return;
     }
   }
 
   //未登录，且访问权限页面则回到登录
-  next("/login")
-  return
-})
+  next("/login");
+  return;
+});
 
-export default router
+export default router;

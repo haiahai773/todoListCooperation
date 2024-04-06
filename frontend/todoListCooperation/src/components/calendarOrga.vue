@@ -1,11 +1,7 @@
 <template>
-    <h1>日历界面</h1>
+  <h1>日历界面</h1>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
