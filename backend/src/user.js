@@ -134,11 +134,11 @@ router.post("/login", async (req, res) => {
 router.post("/createTodo", async (req, res) => {
     //从请求体中解构出信息
     let { event_name, start_time, end_time, target_id } = req.body
+    //将Date类型转化为数据库格式，即删除毫秒和时区，houw
+    console.log(start_time, end_time)
+    
     //从token中获取用户id
     let user_id = req.auth.user_id
-    //将时间戳转化为YYYY-MM-DD HH:mm:ss格式
-    start_time = moment.unix(start_time).format("YYYY-MM-DD HH:mm:ss")
-    end_time = moment.unix(end_time).format("YYYY-MM-DD HH:mm:ss")
     //将待办事项信息插入数据库
     //异步执行，无需等待，因为不是链式回调
     sql.query(`INSERT INTO todo(event_name, start_time, end_time, target_id, user_id) VALUES(?, ?, ?, ?, ?)`, [

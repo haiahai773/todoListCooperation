@@ -44,11 +44,13 @@ app.use((err, req, res, next) => {
 
 //中间件允许跨域
 app.use("*", (req, res, next) => {
-	res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173")
+	res.setHeader("Access-Control-Allow-Origin", "*")
 	res.setHeader("Access-Control-Allow-Headers", "Content-Type")
 	next()
 })
 
 app.listen(3000, () => {
 	console.log("http://localhost:3000")
+
+	
 })
