@@ -23,41 +23,19 @@ const router = createRouter({
                     component: () => import("@/components/list.vue"),
                 },
                 {
-                    path: "calendar",
-                    name: "calendar",
-                    component: () => import("@/components/calendar.vue"),
-                },
-                {
                     path: "quation",
                     name: "quation",
                     component: () => import("@/components/quation.vue"),
                 },
                 {
+                    path: "note",
+                    name: "note",
+                    component: ()=> import("@/components/note.vue")
+                },
+                {
                     path: "tomato",
                     name: "tomato",
                     component: () => import("@/components/tomato.vue"),
-                },
-            ],
-        },
-        {
-            path: "/orga",
-            name: "orga",
-            component: () => import("@/views/orga/orga.vue"),
-            children: [
-                {
-                    path: "member",
-                    name: "member",
-                    component: () => import("@/components/member.vue"),
-                },
-                {
-                    path: "asign",
-                    name: "asign",
-                    component: () => import("@/components/asign.vue"),
-                },
-                {
-                    path: "calendarOrga",
-                    name: "calendarOrga",
-                    component: () => import("@/components/calendarOrga.vue"),
                 },
             ],
         },
@@ -67,7 +45,7 @@ const router = createRouter({
 //白名单，未登录也可以访问
 const whiteList: Array<string> = ["/", "/login"];
 
-const userList: Array<string> = ["/user/list", "/user/quation", "/user/tomato"];
+const userList: Array<string> = ["/user/list", "/user/note", "/user/quation", "/user/tomato"];
 
 //路由前置守卫做页面权限管理
 router.beforeEach((to, from, next) => {

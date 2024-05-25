@@ -10,7 +10,7 @@ export const useTodoStore = defineStore(
         return {
             todoList,
             doneList,
-        };
+        }
     },
     {
         persist: true,

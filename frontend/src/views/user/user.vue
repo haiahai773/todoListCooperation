@@ -20,18 +20,6 @@
                 </div>
                 <div
                     class="flex h-16 w-full cursor-pointer items-center justify-start gap-4 border-gray-200 shadow hover:bg-blue-500"
-                    :class="flag == 1 ? 'bg-blue-500' : ''"
-                    @click="toPath(1, 'calendar')"
-                >
-                    <el-icon className="w-8 ml-6"
-                        ><Calendar color="#e0e0e0"
-                    /></el-icon>
-                    <div class="flex-1 text-lg font-bold text-gray-200">
-                        日历
-                    </div>
-                </div>
-                <div
-                    class="flex h-16 w-full cursor-pointer items-center justify-start gap-4 border-gray-200 shadow hover:bg-blue-500"
                     :class="flag == 2 ? 'bg-blue-500' : ''"
                     @click="toPath(2, 'note')"
                 >
@@ -40,18 +28,6 @@
                     /></el-icon>
                     <div class="flex-1 text-lg font-bold text-gray-200">
                         笔记
-                    </div>
-                </div>
-                <div
-                    class="flex h-16 w-full cursor-pointer items-center justify-start gap-4 border-gray-200 shadow hover:bg-blue-500"
-                    :class="flag == 3 ? 'bg-blue-500' : ''"
-                    @click="toPath(3, 'quation')"
-                >
-                    <el-icon className="w-8 ml-6"
-                        ><CollectionTag color="#e0e0e0"
-                    /></el-icon>
-                    <div class="flex-1 text-lg font-bold text-gray-200">
-                        四象限
                     </div>
                 </div>
                 <div

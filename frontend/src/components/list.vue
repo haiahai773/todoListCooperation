@@ -151,7 +151,7 @@ const submitTodo = () => {
     console.log(parsedDate);
     let result = axiosAPI.createTodo(
         tempTodo.event_name,
-        User.userId,
+        User.userId as number,
         parsedDate as Date,
     );
     console.log(result);

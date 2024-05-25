@@ -2,14 +2,12 @@ import express from "express"
 import mysql2 from "mysql2/promise"
 import fs from "node:fs"
 import jsyaml from "js-yaml"
-import jwt from "jsonwebtoken"
-import { expressjwt } from "express-jwt"
-
-import secretKey from './src/secretKey.js';
 
 //express模块化，导入user接口模块
-import user from "./src/user.js"
-import orga from "./src/orga.js"
+import list from "./src/list/list.js"
+import login from "./src/login/lohin"
+import note from "./src/note/note.js"
+import tomato from "./src/tomato/tomato.js"
 
 //异步读取文件，编码格式为utf-8
 const dbYaml = fs.readFileSync("./src/db.config.yaml", "utf-8")
@@ -24,8 +22,10 @@ const sql = await mysql2.createConnection({
 const app = express()
 
 //使用模块，增加根路径/user
-app.use("/user", user)
-app.use("/orga", orga)
+app.use("/user", list)
+app.use("/user", login)
+app.use("/user", note)
+app.use("/user", tomato)
 
 //通过中间件实现jwt验证
 app.use((err, req, res, next) => {
@@ -51,6 +51,4 @@ app.use("*", (req, res, next) => {
 
 app.listen(3000, () => {
 	console.log("http://localhost:3000")
-
-	
 })
