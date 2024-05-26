@@ -4,8 +4,7 @@ import fs from "node:fs"
 import jsyaml from "js-yaml"
 import { expressjwt } from "express-jwt"
 
-
-import secretKey from './secretKey.js';
+import secretKey from '../secretKey.js';
 
 //使用express的.Router()方法，调用后返回router实例，然后在router实例上进行操作，编写接口
 const router = express.Router()

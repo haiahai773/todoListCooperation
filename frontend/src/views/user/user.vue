@@ -53,10 +53,7 @@
                 </div>
             </div>
         </div>
-        <div
-            id="content"
-            class="flex h-full w-full flex-1 flex-col bg-blue-400"
-        >
+        <div id="content" class="flex h-full w-full flex-1 flex-col bg-white">
             <RouterView />
         </div>
     </div>
