@@ -9,13 +9,13 @@
                 <div
                     class="flex h-16 w-full cursor-pointer items-center justify-start gap-4 shadow hover:bg-blue-500"
                     :class="flag == 0 ? 'bg-blue-500' : ''"
-                    @click="toPath(0, 'list')"
+                    @click="toPath(0, 'todo')"
                 >
                     <el-icon className="w-8 ml-6"
                         ><Tickets color="#e0e0e0"
                     /></el-icon>
                     <div class="flex-1 text-lg font-bold text-gray-200">
-                        清单
+                        事务待办
                     </div>
                 </div>
                 <div
